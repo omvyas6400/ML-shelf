@@ -1,38 +1,173 @@
-.App {
-  text-align: center;
+/* General Dark Mode */
+body {
+  margin: 0;
+  transition: background-color 0.5s, color 0.5s;
+  font-family: 'Arial', sans-serif;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+.app-container {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  transition: background-color 0.5s, color 0.5s;
 }
 
-.App-link {
-  color: #61dafb;
+.light-mode {
+  background-color: #ffffff;
+  color: #000000;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.dark-mode {
+  background-color: #121212;
+  color: #e0e0e0;
 }
+
+/* Styling Cards and Forms for Dark Mode */
+.card {
+  transition: background-color 0.5s, color 0.5s;
+}
+
+.light-mode .card {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.dark-mode .card {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  border: 1px solid #333;
+}
+
+.form-control {
+  transition: background-color 0.5s, color 0.5s, border-color 0.5s;
+}
+
+.light-mode .form-control {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.dark-mode .form-control {
+  background-color: #333333;
+  color: #ffffff;
+  border: 1px solid #555;
+}
+
+/* Button Styles */
+.btn-primary {
+  transition: background-color 0.5s, color 0.5s, border-color 0.5s;
+}
+
+.light-mode .btn-primary {
+  background-color: #007bff;
+  color: #ffffff;
+}
+
+.dark-mode .btn-primary {
+  background-color: #0056b3;
+  color: #ffffff;
+  border: 1px solid #007bff;
+}
+
+/* Header Styling */
+.navbar-light {
+  background-color: #f8f9fa;
+}
+
+.navbar-dark {
+  background-color: #343a40;
+}
+
+.nav-link {
+  color: inherit;
+  transition: color 0.3s;
+}
+
+.nav-link:hover {
+  color: #17a2b8;
+}
+
+/* Add shadow to cards for better visibility */
+.card {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+}
+
+/* Placeholder Styling */
+::placeholder {
+  color: #6c757d; /* Default color for light mode */
+  opacity: 1; /* Show full color */
+}
+
+.dark-mode ::placeholder {
+  color: #e0e0e0; /* Lighter color for dark mode for better contrast */
+}
+
+.dark-mode .dark-mode-select__control {
+  background-color: #333;
+  color: #fff;
+  border-color: #555;
+}
+
+.dark-mode .dark-mode-select__menu {
+  background-color: #333;
+  color: #fff;
+}
+
+.dark-mode .dark-mode-select__option--is-focused {
+  background-color: #444;
+  color: #fff;
+}
+
+.dark-mode .dark-mode-select__option--is-selected {
+  background-color: #555;
+  color: #fff;
+}
+
+/* ListGroup item specific styling for dark mode */
+.dark-mode .list-group-item {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  border: 1px solid #333;
+}
+
+/* Button Styles for other types of buttons */
+.dark-mode .btn-outline-primary {
+  background-color: transparent;
+  color: #007bff;
+  border-color: #007bff;
+}
+
+.dark-mode .btn-outline-primary:hover {
+  background-color: #007bff;
+  color: #ffffff;
+}
+
+/* Additional styling for other React Bootstrap elements if needed */
+.dark-mode .card-header {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  border-bottom: 1px solid #333;
+}
+
+/* Dark mode select customization */
+.dark-mode .dark-mode-select__control {
+  background-color: #333333; /* Darker background for the dropdown */
+  color: #ffffff; /* Text color in dropdown */
+  border: 1px solid #555555; /* Border to distinguish the dropdown in dark mode */
+}
+
+.dark-mode .dark-mode-select__menu {
+  background-color: #1e1e1e; /* Dark mode menu background */
+  color: #ffffff; /* Dark mode text color */
+}
+
+.dark-mode .dark-mode-select__option--is-focused {
+  background-color: #444444; /* Focused state of dropdown items */
+  color: #ffffff; /* Text color for focused option */
+}
+
+.dark-mode .dark-mode-select__option--is-selected {
+  background-color: #555555; /* Selected item color */
+  color: #ffffff; /* Text color for selected item */
+}
+
+
