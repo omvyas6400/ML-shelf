@@ -24,7 +24,7 @@ This project is the frontend for the ML Model Management service, built with Rea
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/eccsm/ml-model-management-frontend.git
+   git clone https://github.com/eccsm/ml-model-management-ui.git
    cd ml-model-management-frontend
    
 2. **Install dependencies:**
