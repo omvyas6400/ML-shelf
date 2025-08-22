@@ -51,9 +51,11 @@ const SignIn = () => {
           
           {error && <Alert variant="danger">{error}</Alert>}
           }
-          {success && <Alert variant="success">{success}</Alert>}
+          {success && <Alert variant="          }
+success">{success}</Alert>}
           
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={h          }
+andleSubmit}>
             <Form.Group className="mb-3">
               <Form.Label>{t('email')}</Form.Label>
               <Form.Control
