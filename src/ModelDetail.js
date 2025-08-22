@@ -113,6 +113,7 @@ const ModelDetail = ({ modelId }) => {
       </Card.Header>
       <Card.Body>
         {message && <Alert variant="info">{message}</Alert>}
+        }
         <p>{t("status")}: <strong>{t(model.status)}</strong></p>
 
         <Form>
