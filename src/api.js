@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { getNavigate } from './navigation';
-import { supabase } from './lib/supabase';
 
 // Create an Axios instance with the base URL of your backend
 const api = axios.create({
@@ -78,17 +77,6 @@ export const uploadFile = (modelId, file) => {
 };
 
 
-api.interceptors.request.use(
-  async (config) => {
-    const { data: { session } } = await supabase.auth.getSession();
-    const token = session?.access_token;
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
 
 
 api.interceptors.response.use(
@@ -100,9 +88,8 @@ api.interceptors.response.use(
       if (status === 403) {
         if (navigate) navigate('/forbidden');
       } else if (status === 401) {
-        // Sign out user and redirect to sign in
-        await supabase.auth.signOut();
-        if (navigate) navigate('/signin');
+        // Redirect to models page on 401
+        if (navigate) navigate('/models');
       }
     }
     return Promise.reject(error);

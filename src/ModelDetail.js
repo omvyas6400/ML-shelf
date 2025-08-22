@@ -38,16 +38,9 @@ const ModelDetail = ({ modelId }) => {
       formData.append('file', selectedFile);
 
       try {
-        const token = localStorage.getItem('jwtToken');
-        if (!token) {
-          setMessage(t("welcome"));
-          return;
-        }
-
         await api.post(`/models/${modelId}/upload`, formData, {
           headers: {
             'content-type': 'multipart/form-data',
-            'Authorization': `Bearer ${token}`,
           },
         });
         setMessage(t("file_uploaded_successfully"));
@@ -70,17 +63,10 @@ const ModelDetail = ({ modelId }) => {
 
   const handleStartTraining = async (dataId) => {
     try {
-      const token = localStorage.getItem('jwtToken');
-      if (!token) {
-        setMessage(t("welcome"));
-        return;
-      }
-
       setTrainingInProgress(dataId);
 
       const response = await api.post(`models/${modelId}/train`, null, {
         headers: {
-          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
       });
@@ -97,17 +83,7 @@ const ModelDetail = ({ modelId }) => {
 
   const handleDeleteModel = async () => {
     try {
-      const token = localStorage.getItem('jwtToken');
-      if (!token) {
-        setMessage(t("welcome"));
-        return;
-      }
-
-      await api.delete(`/models/${modelId}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-      });
+      await api.delete(`/models/${modelId}`);
 
       setMessage(t("model_deleted_successfully"));
       navigate('/models');
@@ -119,17 +95,7 @@ const ModelDetail = ({ modelId }) => {
 
   const handleDelete = async (dataId) => {
     try {
-      const token = localStorage.getItem('jwtToken');
-      if (!token) {
-        setMessage(t("welcome"));
-        return;
-      }
-
-      await api.delete(`/models/${modelId}/trainingData/${dataId}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-      });
+      await api.delete(`/models/${modelId}/trainingData/${dataId}`);
 
       setMessage(t("file_deleted_successfully"));
       const response = await api.get(`/models/${modelId}`);
