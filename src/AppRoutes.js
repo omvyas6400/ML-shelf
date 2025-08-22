@@ -1,45 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { setNavigate } from './navigation';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import ProtectedRoute from './components/auth/ProtectedRoute';
+import SignIn from './components/auth/SignIn';
+import SignUp from './components/auth/SignUp';
+import ForgotPassword from './components/auth/ForgotPassword';
 import ModelList from './ModelList';
 import ModelCreate from './ModelCreate';
 import ModelDetail from './ModelDetail';
-import Signup from './Signup';
-import Login from './Login';
 import Forbidden from './Forbidden';
 import { Container, Row, Col, Navbar, Nav } from 'react-bootstrap';
 import { FaMoon, FaSun } from 'react-icons/fa';
 import ReactCountryFlag from 'react-country-flag';
 import { useTranslation } from 'react-i18next';
 import './App.css';
-import api from './api';
 
-const AppRoutes = () => {
+const AppContent = () => {
   const navigate = useNavigate();
+  const { user, signOut, loading } = useAuth();
+  const { t, i18n } = useTranslation();
+  const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true');
+  const [selectedModelId, setSelectedModelId] = useState(null);
 
   useEffect(() => {
     setNavigate(navigate);
   }, [navigate]);
-
-  const { t, i18n } = useTranslation();
-  const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true');
-  const [token, setToken] = useState(localStorage.getItem('jwtToken') || '');
-  const [username, setUsername] = useState(localStorage.getItem('username') || '');
-  const [selectedModelId, setSelectedModelId] = useState(null);
-
-  const fetchModels = async () => {
-    try {
-      await api.get('/models');
-    } catch (error) {
-      console.error('Error fetching models:', error);
-    }
-  };
-
-  useEffect(() => {
-    if (token) {
-      fetchModels();
-    }
-  }, [token]);
 
   const toggleDarkMode = () => {
     const newDarkMode = !darkMode;
@@ -53,12 +39,17 @@ const AppRoutes = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('jwtToken');
-    localStorage.removeItem('username');
-    setToken('');
-    setUsername('');
-    navigate('/login');
+    signOut();
+    navigate('/signin');
   };
+
+  if (loading) {
+    return (
+      <Container className="d-flex justify-content-center align-items-center min-vh-100">
+        <div>Loading...</div>
+      </Container>
+    );
+  }
 
   return (
     <div className={`app-container ${darkMode ? 'dark-mode' : 'light-mode'}`}>
@@ -77,14 +68,18 @@ const AppRoutes = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link href="/">{t('home')}</Nav.Link>
-              {!token && <Nav.Link href="/signup">{t('signup')}</Nav.Link>}
-              {!token && <Nav.Link href="/login">{t('login')}</Nav.Link>}
+              {!user && <Nav.Link href="/signup">{t('sign_up')}</Nav.Link>}
+              {!user && <Nav.Link href="/signin">{t('sign_in')}</Nav.Link>}
             </Nav>
             <Nav className="ml-auto d-flex align-items-center">
-            {username && <Nav.Link>{t('welcome')}, {username.toUpperCase()}</Nav.Link>}
-              {token && (
+              {user && (
+                <Nav.Link>
+                  {t('welcome')}, {user.user_metadata?.full_name || user.email}
+                </Nav.Link>
+              )}
+              {user && (
                 <Nav.Link onClick={handleLogout} className="d-flex align-items-center">
-                  {t('logout')}
+                  {t('sign_out')}
                 </Nav.Link>
               )}
               <Nav.Link onClick={toggleDarkMode} className="d-flex align-items-center">
@@ -102,12 +97,13 @@ const AppRoutes = () => {
       </Navbar>
       <Container className="my-4">
         <Routes>
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login setToken={setToken} setUsername={setUsername} />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route
             path="/models"
             element={
-              token ? (
+              <ProtectedRoute>
                 <Row>
                   <Col md={4}>
                     <ModelList onSelectModel={setSelectedModelId} />
@@ -116,20 +112,26 @@ const AppRoutes = () => {
                     {selectedModelId ? (
                       <ModelDetail modelId={selectedModelId} />
                     ) : (
-                      <ModelCreate onModelCreated={fetchModels} />
+                      <ModelCreate />
                     )}
                   </Col>
                 </Row>
-              ) : (
-                <Navigate to="/forbidden" />
-              )
+              </ProtectedRoute>
             }
           />
           <Route path="/forbidden" element={<Forbidden />} />
-          <Route path="/" element={token ? <Navigate to="/models" /> : <Navigate to="/login" />} />
+          <Route path="/" element={user ? <Navigate to="/models" /> : <Navigate to="/signin" />} />
         </Routes>
       </Container>
     </div>
+  );
+};
+
+const AppRoutes = () => {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 };
 

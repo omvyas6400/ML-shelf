@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getNavigate } from './navigation';
+import { supabase } from './lib/supabase';
 
 // Create an Axios instance with the base URL of your backend
 const api = axios.create({
@@ -77,53 +78,10 @@ export const uploadFile = (modelId, file) => {
 };
 
 
-export const loginUser = async (username, password) => {
-  try {
-    const response = await axios.post('http://localhost:8080/auth/login', {
-      username,
-      password,
-    });
-
-    const token = response.data.token; 
-
-
-    localStorage.setItem('jwtToken', token);
-    localStorage.setItem('username', username);
-
-    return response; 
-
-  } catch (error) {
-
-  }
-};
-
-
-export const registerUser = async (username, password, roles) => {
-  try {
-    const response = await axios.post(
-      'http://localhost:8080/auth/register',
-      {
-        username,
-        password,
-        roles,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-    return response; // Return the response for further use
-  } catch (error) {
-    console.error('Error during user registration:', error);
-    throw error;
-  }
-};
-
-
 api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('jwtToken');
+  async (config) => {
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session?.access_token;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -142,7 +100,9 @@ api.interceptors.response.use(
       if (status === 403) {
         if (navigate) navigate('/forbidden');
       } else if (status === 401) {
-        if (navigate) navigate('/login');
+        // Sign out user and redirect to sign in
+        await supabase.auth.signOut();
+        if (navigate) navigate('/signin');
       }
     }
     return Promise.reject(error);

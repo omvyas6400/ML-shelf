@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, Form, Alert } from 'react-bootstrap';
 import api from './api';
 
-const ModelCreate = ({ darkMode, onModelCreated }) => {  
+const ModelCreate = ({ darkMode }) => {  
   const { t } = useTranslation();
   const [modelName, setModelName] = useState('');
   const [selectedLayers, setSelectedLayers] = useState([]);
@@ -40,10 +40,6 @@ const handleSubmit = async (e) => {
     setMessage(t('model_created_successfully'));
     setModelName('');
     setSelectedLayers([]);
-
-    if (onModelCreated) {
-      onModelCreated(response.data.id); // Pass the new model ID
-    }
   } catch (error) {
     console.error(t('error_creating_model'), error);
     setMessage(t('failed_to_create_model'));
