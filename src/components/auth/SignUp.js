@@ -66,8 +66,17 @@ const SignUp = () => {
       if (error) {
         setError(error.message)
       } else {
-        setSuccess(t('sign_up_successful_check_email'))
-        setTimeout(() => navigate('/signin'), 3000)
+        setSuccess(t('sign_up_successful'))
+        // Clear form
+        setFormData({
+          email: '',
+          password: '',
+          confirmPassword: '',
+          firstName: '',
+          lastName: ''
+        })
+        // Redirect to models page since user is now signed in
+        setTimeout(() => navigate('/models'), 2000)
       }
     } catch (err) {
       setError(t('sign_up_error'))
@@ -83,7 +92,9 @@ const SignUp = () => {
           <h2 className="text-center mb-4">{t('sign_up')}</h2>
           
           {error && <Alert variant="danger">{error}</Alert>}
+          }
           {success && <Alert variant="success">{success}</Alert>}
+          }
           
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">

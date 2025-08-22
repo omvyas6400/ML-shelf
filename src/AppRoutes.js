@@ -39,8 +39,9 @@ const AppContent = () => {
   };
 
   const handleLogout = () => {
-    signOut();
-    navigate('/signin');
+    signOut().then(() => {
+      navigate('/signin');
+    });
   };
 
   if (loading) {
@@ -69,7 +70,9 @@ const AppContent = () => {
             <Nav className="me-auto">
               <Nav.Link href="/">{t('home')}</Nav.Link>
               {!user && <Nav.Link href="/signup">{t('sign_up')}</Nav.Link>}
+              }
               {!user && <Nav.Link href="/signin">{t('sign_in')}</Nav.Link>}
+              }
             </Nav>
             <Nav className="ml-auto d-flex align-items-center">
               {user && (

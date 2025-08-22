@@ -93,7 +93,7 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
     if (error.response) {
       const { status } = error.response;
       const navigate = getNavigate();
