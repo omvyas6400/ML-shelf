@@ -92,9 +92,7 @@ const SignUp = () => {
           <h2 className="text-center mb-4">{t('sign_up')}</h2>
           
           {error && <Alert variant="danger">{error}</Alert>}
-          }
           {success && <Alert variant="success">{success}</Alert>}
-          }
           
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">

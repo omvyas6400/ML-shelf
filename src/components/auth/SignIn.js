@@ -17,6 +17,7 @@ const SignIn = () => {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
 
+  const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
@@ -29,6 +30,7 @@ const SignIn = () => {
     setError('')
     setSuccess('')
 
+    try {
       const { error } = await signIn(formData.email, formData.password)
       
       if (error) {
@@ -36,6 +38,7 @@ const SignIn = () => {
       } else {
         setSuccess(t('sign_in_successful'))
         navigate('/models')
+      }
     } catch (err) {
       setError(t('sign_in_error'))
     } finally {
@@ -50,12 +53,9 @@ const SignIn = () => {
           <h2 className="text-center mb-4">{t('sign_in')}</h2>
           
           {error && <Alert variant="danger">{error}</Alert>}
-          }
-          {success && <Alert variant="          }
-success">{success}</Alert>}
+          {success && <Alert variant="success">{success}</Alert>}
           
-          <Form onSubmit={h          }
-andleSubmit}>
+          <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
               <Form.Label>{t('email')}</Form.Label>
               <Form.Control
